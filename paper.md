@@ -20,7 +20,16 @@ affiliations:
 ---
 
 # Summary
+
 # Statement of need
+
 # Main functions
+
+# Installation
+
+# Auhtor contributions
+
 # Acknowledgements
+SNF DynamicLand; EC Horizon-Europe Nostradamus, MONALISA & LandShift
+
 # References
