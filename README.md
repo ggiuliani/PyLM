@@ -4,7 +4,7 @@ A Python implementation of the Landscape Moscai model
 ## Installation
 The only strict requirement to run PyLM is to have a Jupyter server installed either on a [server](https://jupyter.org/install) or on a [desktop](https://github.com/jupyterlab/jupyterlab-desktop) computer with Python >= 3.12.5
 
-## Main functions & documentation
+## Main modules & documentation
 Soon...
 
 ## Test

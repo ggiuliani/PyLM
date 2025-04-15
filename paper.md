@@ -30,7 +30,7 @@ There is a neeed for a standalone tool to could be closley connected to land cov
 
 PyLM is therefore....
 
-# Main functions
+# Main modules
 
 # Installation
 
