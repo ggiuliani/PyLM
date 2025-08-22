@@ -20,8 +20,13 @@ affiliations:
 ---
 
 # Summary
+[ describing the high-level functionality and purpose of the software for a diverse, non-specialist audience.]
+PyML is a Python implementation of the LM model
+
+It facilitates the analysis of Land Cover data to produce relevant metrics for Landscape assessment.
 
 # Statement of need
+[illustrates the research purpose of the software and places it in the context of related work.]
 The need of landscape mosaic
 
 Only implementation available is in GuidosToolbox - Graphical User Interface for the Description of image Objects and their Shapes - GTB (https://doi.org/10.1080/22797254.2017.1330650). GTB is an suite of sotfware components mostly used for forestry.
@@ -31,15 +36,26 @@ There is a neeed for a standalone tool to could be closley connected to land cov
 PyLM is therefore....
 
 # Main modules
+Linear process (each module the subsequant one)
+(1) Initialization
+(2) Input data + map conversion [optional]
+(3) LM Analysis
+(3.1) Moving window - 103 classes - 19 classes
+(3.2) LM Background
+(3.3) LM Diversity
+(3.4) LM Agriculture
+(3.5) LM Natural
+(3.6) LM Developed
+(3.7) LM Antthropic intensity
 
 # Installation
+Require Jupyter Notebook/Lab and Python 3.XX
+Copy the notebook in the folder
 
 # Auhtor contributions
-Gregory Giuliani authored the original version of the package, developed the pipeline and majority
-of its functions, maintained the package, wrote the documentation, debugged the code, and
-contributed to the drafting of the article.
+Gregory Giuliani authored the original version of the package, developed the pipeline and all of its functions, maintained the package, wrote the documentation, debugged the code, and contributed to the drafting of the article.
 
 # Acknowledgements
-SNF DynamicLand; EC Horizon-Europe Nostradamus, MONALISA & LandShift
+SNF DynamicLand; EC Horizon-Europe MONALISA & LandShift
 
 # References
