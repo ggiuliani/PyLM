@@ -35,6 +35,8 @@ There is a neeed for a standalone tool to could be closley connected to land cov
 
 PyLM is therefore....
 
+Integrated as an analytical module within the Living Earth framework
+
 # Main modules
 Linear process (each module the subsequant one)
 (1) Initialization
