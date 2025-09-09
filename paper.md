@@ -5,18 +5,22 @@ tags:
 - Jupyter
 - land cover
 - landscape
-date: "13 April 2025"
+- environment
+- ecology
+- ecosystem services
+date: "9 September 2025"
 output: pdf_document
 authors:
 - name: Gregory Giuliani
   orcid: "0000-0002-1825-8865"
   corresponding: yes
-  affiliation: '1'
+  affiliation: '1, 2'
 bibliography: paper.bib
 affiliations:
-- name: Envirospace group, Institute for Environmental Sciences, University
-    of Geneva, Geneva, Switzerland
-  index: 1
+- index: 1 
+  name: Envirospace group, Institute for Environmental Sciences, University of Geneva, Geneva, Switzerland
+- index: 2
+  name: United Nations Environment Programme, GRID-Geneva, Geneva, Switzerland  
 ---
 
 # Summary
