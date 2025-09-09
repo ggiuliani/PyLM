@@ -25,7 +25,8 @@ affiliations:
 
 # Summary
 [ describing the high-level functionality and purpose of the software for a diverse, non-specialist audience.]
-PyML is a Python implementation of the LM model
+Landscape analysis, ... however the only implementation available is in GTB
+PyLM is a Python implementation of the Landscape Mosaic (LM) model originally developed by Vogt et al and Ritters et al.
 
 It facilitates the analysis of Land Cover data to produce relevant metrics for Landscape assessment.
 
