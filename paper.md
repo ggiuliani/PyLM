@@ -60,7 +60,7 @@ Linear process (each module the subsequant one)
 (3.7) LM Antthropic intensity
 
 # Installation
-Require Jupyter Notebook/Lab and Python 3.XX
+Require Jupyter Notebook/Lab and Python 3.10 (minimal)
 Copy the notebook in the folder
 
 # Auhtor contributions
