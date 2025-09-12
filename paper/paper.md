@@ -25,7 +25,7 @@ affiliations:
 
 # Summary
 [ describing the high-level functionality and purpose of the software for a diverse, non-specialist audience.]
-Landscape analysis, ... however the only implementation available is in GTB
+
 PyLM is a Python implementation of the Landscape Mosaic (LM) model originally developed by Vogt et al and Ritters et al.
 
 It facilitates the analysis of Land Cover data to produce relevant metrics for Landscape assessment.
@@ -48,6 +48,7 @@ Linear process (each module the subsequant one) (see for modules description: ht
 (3.5) LM Natural
 (3.6) LM Developed
 (3.7) LM Antthropic intensity
+(3.8) Heatmap
 
 # Installation
 Require Jupyter Notebook/Lab and Python 3.10 (minimal)
