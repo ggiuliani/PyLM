@@ -39,7 +39,7 @@ Based on these considerations, PyLM provides a Python implementation of the Land
 # Main modules
 Linear process (each module the subsequant one) (see for modules description: https://publications.jrc.ec.europa.eu/repository/handle/JRC120383)
 (1) Initialization
-(2) Input data + map conversion [optional]
+(2) Input/Output data + map conversion [optional]
 (3) LM Analysis
 (3.1) Moving window - 103 classes - 19 classes
 (3.2) LM Background
