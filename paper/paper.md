@@ -34,18 +34,19 @@ Based on these considerations, PyLM provides a Python implementation of the Land
 
 # Main modules
 The analytical workflow follows a linear architecture, in which the output of each module constitutes the input for the subsequent module. Hereafter, we present the main modules and their respective tasks: 
-* `(1) Initialization`: This module first test if the necessary librairies are installed and then user is able to define both input and output folders.
-* `(2) 'Input data`: reads and provides information on the input raster map with no more than 3 target classes having the assignment AND (1 Byte - Agriculture, 2 Byte - Natural, 3 Byte - Developed) plus an optional class value of 0 Byte which is reserved for masking missing/no-data pixels. 
-* `(2.1) Map conversion [optional]`: Depending on the LUC used, this modules gives the flexibility to reclassify any land cover/use (LUC) map to the 3-class raster map required by the LM model.
-* `(3) LM Analysis`: This the main module that computes first the proportion of A-N-D per pixel, then produces the 103 classes and 19 classes following [riitters_indicator_2009, vogt_revisiting_2024], and finally generates all the stratification layers.
-* `(3.1) Moving window - 103 classes - 19 classes`: This sub-module computes the propostion of A-N-D classes on a per pixel basis and then computes the 103 classes and aggregates to 19 classes.
-* `(3.2) LM Background`: summarizes the LM into 4 classes Natural - Agriculture - Developed - Mixed, showing the dominant presence of each LUC classes.
-* `(3.3) LM Diversity`: summarizes the LM into 4 classes to account the increasing degree of LUC diversity from Uniform, Dual, Triple, or Intermixed LUC, reporting on the degree of spatial heterogeneity.
-* `(3.4) LM Agriculture`: summarizes the LM into 3 classes showing where agricultural LUC is dominant (>=60%), subdominant, or minor (<10%), thereby enabling the determination of the anthropogenic impact from agriculture.
-* `(3.5) LM Natural`: summarizes the LM into 3 classes showing where natural LUC is dominant (>=60%), subdominant, or minor (<10%), allowing to determine the dominant natural classes not impacted by anthropogenic activies.
-* `(3.6) LM Developed`: summarizes the LM into 3 classes showing where developed LUC is dominant (>=60%), subdominant, or minor (<10%), allowing to determine the anthropogenic impact from urbanization.
-* `(3.7) LM Anthropic intensity`: summarizes the anthopic intensity into 6 classes from Very Low - Low - Medium - High - Very High - Extreme, to account for the anthropogenic impacts.
-* `(3.8) Heatmap`: provides summary statistics of the frequency distribution of the 103-classes within the ternary diagram.
+
+- `(1) Initialization`: This module first test if the necessary librairies are installed and then user is able to define both input and output folders.
+- `(2) 'Input data`: reads and provides information on the input raster map with no more than 3 target classes having the assignment AND (1 Byte - Agriculture, 2 Byte - Natural, 3 Byte - Developed) plus an optional class value of 0 Byte which is reserved for masking missing/no-data pixels. 
+- `(2.1) Map conversion [optional]`: Depending on the LUC used, this modules gives the flexibility to reclassify any land cover/use (LUC) map to the 3-class raster map required by the LM model.
+- `(3) LM Analysis`: This the main module that computes first the proportion of A-N-D per pixel, then produces the 103 classes and 19 classes following [riitters_indicator_2009, vogt_revisiting_2024], and finally generates all the stratification layers.
+- `(3.1) Moving window - 103 classes - 19 classes`: This sub-module computes the propostion of A-N-D classes on a per pixel basis and then computes the 103 classes and aggregates to 19 classes.
+- `(3.2) LM Background`: summarizes the LM into 4 classes Natural - Agriculture - Developed - Mixed, showing the dominant presence of each LUC classes.
+- `(3.3) LM Diversity`: summarizes the LM into 4 classes to account the increasing degree of LUC diversity from Uniform, Dual, Triple, or Intermixed LUC, reporting on the degree of spatial heterogeneity.
+- `(3.4) LM Agriculture`: summarizes the LM into 3 classes showing where agricultural LUC is dominant (>=60%), subdominant, or minor (<10%), thereby enabling the determination of the anthropogenic impact from agriculture.
+- `(3.5) LM Natural`: summarizes the LM into 3 classes showing where natural LUC is dominant (>=60%), subdominant, or minor (<10%), allowing to determine the dominant natural classes not impacted by anthropogenic activies.
+- `(3.6) LM Developed`: summarizes the LM into 3 classes showing where developed LUC is dominant (>=60%), subdominant, or minor (<10%), allowing to determine the anthropogenic impact from urbanization.
+- `(3.7) LM Anthropic intensity`: summarizes the anthopic intensity into 6 classes from Very Low - Low - Medium - High - Very High - Extreme, to account for the anthropogenic impacts.
+- `(3.8) Heatmap`: provides summary statistics of the frequency distribution of the 103-classes within the ternary diagram.
 
 # Installation
 Require Jupyter Notebook/Lab and Python 3.10 (minimal)
