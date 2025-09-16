@@ -49,8 +49,8 @@ The analytical workflow follows a linear architecture, in which the output of ea
 - `(3.8) Heatmap`: provides summary statistics of the frequency distribution of the 103-classes within the ternary diagram.
 
 # Installation
-Require Jupyter Notebook/Lab and Python 3.10 (minimal)
-Copy the notebook in the folder
+This package requires Python 3.10 or later and JupyterLab (server or desktop). It also requires the following packages: 
+`rasterio`, `numpy`, `scipy`, and `csv`. These dependencies are automatically verified (and installed) within the <i>Intialization</i> module.
 
 # Auhtor contributions
 Gregory Giuliani authored the original version of the package, developed the pipeline and all of its functions, maintained the package, wrote the documentation, debugged the code, and contributed to the drafting of the article.
