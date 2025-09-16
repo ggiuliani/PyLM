@@ -48,9 +48,9 @@ The analytical workflow follows a linear architecture, in which the output of ea
 - `(3.7) LM Anthropic intensity`: summarizes the anthopic intensity into 6 classes from Very Low - Low - Medium - High - Very High - Extreme, to account for the anthropogenic impacts.
 - `(3.8) Heatmap`: provides summary statistics of the frequency distribution of the 103-classes within the ternary diagram.
 
-![Figure 1: Output of module 3.1 showing the 19 classes map for the entire Switzerland.\label{fig1}](../img/figure1.png)
+![Output of module 3.1 showing the 19 classes map for the entire Switzerland.\label{fig1}](../img/figure1.png)
 
-![Figure 2: The five stratification layers produced for the entire Switzerland.\label{fig2}](../img/figure2.png)
+![The five stratification layers produced for the entire Switzerland.\label{fig2}](../img/figure2.png)
 
 # Installation
 This package requires Python 3.10 or later and JupyterLab (server or desktop). It also requires the following packages: 
