@@ -4,16 +4,17 @@
 # # PyLM - Python Landscape Mosaic model
 
 # ---
-# <div>This is a Python implementation of the Landscape Mosaic approach as originaly proposed by <a href='https://doi.org/10.1016/j.ecolind.2008.02.003' target='_blank'>Ritters et al. (2009)</a> and further refined by <a href='https://ies-ows.jrc.ec.europa.eu/gtb/GTB/psheets/GTB-Pattern-LM.pdf' target='_blank'>Vogt et al. (2024)</a> and <a href='https://doi.org/10.1371/journal.pone.0304215' target='_blank'>Vogt et al. (2024)</a> to support landscape anaylsis.</div>
-# <br>Author(s): <a href='https://www.unige.ch/envirospace/people/giuliani' target='_blank'>Gregory Giuliani</a>
-# <br>Version: 0.1
-# <br>Date: 2025-09-10
-# <br>Supported by: SNF DynamicLand; Horizon-Europe LandShift and MONALISA
+# <div>This is a Python implementation of the Landscape Mosaic approach as originaly proposed by <a href='https://doi.org/10.1016/j.ecolind.2008.02.003' target='_blank'>Ritters et al. (2009)</a> and further refined by <a href='https://ies-ows.jrc.ec.europa.eu/gtb/GTB/psheets/GTB-Pattern-LM.pdf' target='_blank'>Vogt et al. (2024)</a> and <a href='https://doi.org/10.1371/journal.pone.0304215' target='_blank'>Vogt et al. (2024)</a> for processing land cover maps, generating stratification layers, and producing key landscape metrics and visualizations (e.g., heatmaps).</div>
+# 
+# <br><i>Author(s):</i> <a href='https://www.unige.ch/envirospace/people/giuliani' target='_blank'>Gregory Giuliani</a>
+# <br><i>Version:</i> 1.0
+# <br><i>Date:</i> 2025-09-19
+# <br><i>Supported by:</i> SNSF <a href='https://data.snf.ch/grants/grant/221323' target='_blank'>DynamicLand</a>; Horizon-Europe <a href='https://landshift.eu' target='_blank'>LandShift</a> and <a href='https://monalisa4land.eu' target='_blank'>MONALISA</a> projects
 
 # ---
 # <b><u>Outline</u></b>
 # * [Methdology](#methodology)
-# * [Intialize](#initialize)
+# * [Intialization](#initialize)
 # * [Input data](#inputdata)
 #     * [Clip data](#clip)
 # * [LM Analysis](#lmAnalysis)
@@ -36,7 +37,7 @@
 
 # ---
 # <a id="initialize"></a>
-# ## Initialize
+# ## Initialization
 # <div style="text-align: justify">This module first test if the necessary librairies are installed and then user is able to define both input and output folders.</div>
 
 # ### Load librairies
@@ -94,14 +95,14 @@ outputFolder = '../outputs/' #To be adapted by user
 
 
 # <a id="inputdata"></a>
-# ## Input Data - Import the 3-class Land Cover map
+# ## Input Data
 # <div style="text-align: justify">The input image for the Landscape Mosaic analysis must be a raster map with no more than 3 target classes having the assignment AND (1 Byte - Agriculture, 2 Byte - Natural, 3 Byte - Developed) plus an optional class value of 0 Byte which is reserved for masking missing/no-data pixels. The target classes must not necessary be Agriculture, Natural, Developed but could be any three prevalent land cover types in a given area.</div>
 
 # In[ ]:
 
 
-#read the LCCS Level-3 geotiff file
-l3 = rasterio.open(inputFolder+'level3_out_ch_2018.tif') #To be adapted by user
+#read the 3-classes geotiff file
+l3 = rasterio.open(inputFolder+'switzerland_CCI_92.tif') #To be adapted by user
 
 
 # ### Layer information
@@ -141,26 +142,57 @@ pyplot.imshow(band1, cmap='grey')
 pyplot.show()  
 
 
-# ### Map conversion
+# ### Map conversion [optional]
 # To comply with the LM-input requirements, this input image is then re-mapped into the 3 land cover types: Agriculture (1), Natural(2), Developed(3).
-# <br>IMPORTANT: this module should be adapted to your LC classification schema
+# <br>IMPORTANT: this module should be adapted to your LC classification schema (hereafter we provide an example based on the ESA CCI schema)
 # 
-# |Value|LCCS Code|LCCS Description|LM Code|LM Description|
-# |---|---|---|---|---|
-# |111|A11|Cultivated Terrestrial Vegetated|1|Agriculture|
-# |112|A12|Natural Terrestrial Vegetated|2|Natural|
-# |123|A23|Cultivated Aquatic Vegetated|1|Agriculture|
-# |124|A24|Natural Aquatic Vegetated|2|Natural|
-# |215|B15|Artificial Surface|3|Developed|
-# |216|B16|Bare Surface|2|Natural|
-# |227|B27|Artificial Water|3|Developed|
-# |228|B28|Natural Water|2|Natural|
+# |Value|CCI Label|LM Code|LM Description|
+# |---|---|---|---|
+# |0|No Data|0|No data|
+# |10|Cropland, rainfed|1|Agriculture|
+# |11|Herbaceous cover|1|Agriculture|
+# |12|Tree or shrub cover|1|Agriculture|
+# |20|Cropland, irrigated or post‐flooding|1|Agriculture|
+# |30|Mosaic cropland (>50%) / natural vegetation (tree, shrub, herbaceous cover) (<50%)|1|Agriculture|
+# |40|Mosaic natural vegetation (tree, shrub, herbaceous cover) (>50%) / cropland (<50%)|1|Agriculture|
+# |50|Tree cover, broadleaved, evergreen, closed to open (>15%)|2|Natural|
+# |60|Tree cover, broadleaved, deciduous, closed to open (>15%)|2|Natural|
+# |61|Tree cover, broadleaved, deciduous, closed (>40%)|2|Natural|
+# |62|Tree cover, broadleaved, deciduous, open (15‐40%)|2|Natural|
+# |70|Tree cover, needleleaved, evergreen, closed to open (>15%)|2|Natural|
+# |71|Tree cover, needleleaved, evergreen, closed (>40%)|2|Natural|
+# |72|Tree cover, needleleaved, evergreen, open (15‐40%)|2|Natural|
+# |80|Tree cover, needleleaved, deciduous, closed to open (>15%)|2|Natural|
+# |81|Tree cover, needleleaved, deciduous, closed (>40%)|2|Natural|
+# |82|Tree cover, needleleaved, deciduous, open (15‐40%)|2|Natural|
+# |90|Tree cover, mixed leaf type (broadleaved and needleleaved)|2|Natural|
+# |100|Mosaic tree and shrub (>50%) / herbaceous cover (<50%)|2|Natural|
+# |110|Mosaic herbaceous cover (>50%) / tree and shrub (<50%)|2|Natural|
+# |120|Shrubland|2|Natural|
+# |121|Evergreen shrubland|2|Natural|
+# |122|Deciduous shrubland|2|Natural|
+# |130|Grassland|2|Natural|
+# |140|Lichens and mosses|2|Natural|
+# |150|Sparse vegetation (tree, shrub, herbaceous cover) (<15%)|2|Natural|
+# |151|Sparse tree (<15%)|2|Natural|
+# |152|Sparse shrub (<15%)|2|Natural|
+# |153|Sparse herbaceous cover (<15%)|2|Natural|
+# |160|Tree cover, flooded, fresh or brakish water|2|Natural|
+# |170|Tree cover, flooded, saline water|2|Natural|
+# |180|Shrub or herbaceous cover, flooded, fresh/saline/brakish water|2|Natural|
+# |190|Urban areas|3|Developed|
+# |200|Bare areas|2|Natural|
+# |201|Consolidated bare areas|2|Natural|
+# |202|Unconsolidated bare areas|2|Natural|
+# |210|Water bodies|2|Natural|
+# |220|Permanent snow and ice|2|Natural|
+# 
 
 # In[ ]:
 
 
 #Reclassify
-with rasterio.open('switzerland_CCI_92.tif') as src:    
+with rasterio.open(inputFolder+'switzerland_CCI_92.tif') as src: #To be adapted by user 
     # Read as numpy array
     array = src.read()
     profile = src.profile
@@ -250,8 +282,6 @@ raster = src.read(1)
 #General idea: iterate over the entire array
 #for each pixel > store c1-c2-c3 (values store in a 3-band raster, each representing one class
 #the produced raster is then used for the Map - Heatmap - LM_Background, ...
-#Padding: https://www.pythoncentral.io/how-to-use-numpy-pad-examples-and-syntax/
-#if the LCCS3 map is at 10m resolution then a 10x10 window will give you a direct %
 
 #window size
 res=10
