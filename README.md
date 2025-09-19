@@ -5,6 +5,8 @@ PyLM is a Python implementation of the Landscape Mosaic model for processing lan
 This package requires Python 3.10 or later and JupyterLab either on a [server](https://jupyter.org/install) or on a [desktop](https://github.com/jupyterlab/jupyterlab-desktop). It also requires the following packages: 
 `rasterio`, `numpy`, `scipy`, and `csv`. These dependencies are automatically verified (and installed) within the <i>Intialization</i> module.
 
+Users have to define the input (i.e., where the input LUC map in geotiff format is stored - `inputFolder`) and output (i.e., where all produced layers will be stored - `outputFolder`) folders. In addition, users can edit the file name of the LUC map in the `l3` variable.
+
 ## Main modules
 The analytical workflow follows a linear architecture, in which the output of each module constitutes the input for the subsequent module. Hereafter, we present the main modules and their respective tasks: 
 
