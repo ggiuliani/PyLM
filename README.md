@@ -23,7 +23,7 @@ The analytical workflow follows a linear architecture, in which the output of ea
 
 ![Output of module 3.1 showing the 19 classes map for the entire Switzerland.\label{fig1}](img/figure1.png)
 
-![The five stratification layers produced for the entire Switzerland.\label{fig2}](img/figure2.png)
+![The six stratification layers produced with PyLM for the entire Switzerland.\label{fig2}](img/figure2.png)
 
 ## Test
 The dependencies are automatically verified (and installed) within the <i>Intialization</i> module.
