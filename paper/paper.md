@@ -63,6 +63,9 @@ Users have to define the input (i.e., where the input LUC map in geotiff format 
 # Auhtor contributions
 Gregory Giuliani authored the original version of the package, developed the pipeline and all of its functions, maintained the package, wrote the documentation, debugged the code, and contributed to the drafting of the article.
 
+# Ongoing research using PyLM
+Research applicable with PyLM includes Land Degradation assessment (e.g., Horizon-Europe MONALISA project - <a href='https://monalisa4land.eu' target='_blank'>https://monalisa4land.eu</a>), ecosystem accounting (e.g., Horizon-Europe LandShift project - <a href='>https://landshift.eu' target='_blank'>https://landshift.eu)</a>, Dynamic & Quantitative Land Environmental Description System (e.g., SNSF DynamicLand project - <a href='https://data.snf.ch/grants/grant/221323' target='_blank'>https://data.snf.ch/grants/grant/221323</a>) or the developement of Digital Twin of the Environment (e.g., SNSF DT4LC - <a href='https://data.snf.ch/grants/grant/224912' target='_blank'>https://data.snf.ch/grants/grant/224912</a>)
+ 
 # Acknowledgements
 The author would like to acknowledge the European Union ‘Horizon Europe Program’ that funded the LandShift (Grant Agreement no. 101182007) and the MONALISA (Grant Agreement no. 101157867) projects as well as the Swiss National Science Foundation that funded the DynamicLand project (Grant no. 221323) for their respective support.
 The author acknowledge contributions from Lucie Schlumpf and Carole Planque for their help in testing the package. Their input and feedback were essential in identifying and resolving technical issues, ensuring the accuracy and reliability of the results.
