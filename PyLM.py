@@ -8,7 +8,7 @@
 # 
 # <br><i>Author(s):</i> <a href='https://www.unige.ch/envirospace/people/giuliani' target='_blank'>Gregory Giuliani</a>
 # <br><i>Version:</i> 1.0
-# <br><i>Date:</i> 2025-09-19
+# <br><i>Date:</i> 2025-09-24
 # <br><i>Supported by:</i> SNSF <a href='https://data.snf.ch/grants/grant/221323' target='_blank'>DynamicLand</a>; Horizon-Europe <a href='https://landshift.eu' target='_blank'>LandShift</a> and <a href='https://monalisa4land.eu' target='_blank'>MONALISA</a> projects
 
 # ---
@@ -44,36 +44,41 @@
 
 # In[ ]:
 
-
+import os
 # Test if the libraries are installed and if not install them
-try:
-  import rasterio
-except:
-  get_ipython().system('pip install rasterio')
-  import rasterio
 
 try:
   import numpy
 except:
-  get_ipython().system('pip install numpy')
+  os.system('pip install numpy')
   import numpy
+
+try:
+  import rasterio
+except:
+  os.system('pip install rasterio')
+  import rasterio
 
 try:
   import scipy
 except:
-  get_ipython().system('pip install scipy')
+  os.system('pip install scipy')
   import scipy
 
 try:
   import csv
 except:
-  get_ipython().system('pip install csv')
+  os.system('pip install csv')
   import csv
+
+try: 
+    import matplotlib
+except:
+    os.system('pip install matplotlib')
+    import matplotlib
 
 #Import all necessary libraries
-import rasterio
 import numpy as np
-import scipy
 import rasterio.mask
 from matplotlib import pyplot
 import matplotlib.pyplot as plt
@@ -82,7 +87,6 @@ from itertools import product
 from rasterio.transform import Affine
 from rasterio.transform import from_origin
 from numpy.lib.stride_tricks import sliding_window_view
-import csv
 
 
 # ### Define the input and output folders
@@ -90,8 +94,8 @@ import csv
 # In[ ]:
 
 
-inputFolder = '../inputs/' #To be adapted by user
-outputFolder = '../outputs/' #To be adapted by user
+inputFolder = 'inputs/' #To be adapted by user
+outputFolder = 'outputs/' #To be adapted by user
 
 
 # <a id="inputdata"></a>
