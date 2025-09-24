@@ -58,7 +58,7 @@ The analytical workflow follows a linear architecture, in which the output of ea
 This package requires Python 3.10 or later and JupyterLab (server or desktop). It also requires the following packages: 
 `rasterio`, `numpy`, `scipy`,  `matplotlib` and `csv`. These dependencies are automatically verified (and installed) within the <i>Intialization</i> module.
 
-Users have to define the input (i.e., where the input LUC map in geotiff format is stored - `inputFolder`) and output (i.e., where all produced layers will be stored - `outputFolder`) folders. In addition, users can edit the file name of the LUC map in the `l3` variable.
+Once the release downloaded and the zip file extracted, user can edit the python file (or the Jupyter NoteBook file) to define to define the input (i.e., where the input LUC map in geotiff format is stored - `inputFolder`) and output (i.e., where all produced layers will be stored - `outputFolder`) folders. In addition, users can also edit the filename of the LUC map in the `l3` variable. Then simply execute the command `python PyLM.py` and once process all layers are available in the output folder. Altneratively, users can execute the Jupyter NoteBook provided in the release.
 
 # Auhtor contributions
 Gregory Giuliani authored the original version of the package, developed the pipeline and all of its functions, maintained the package, wrote the documentation, debugged the code, and contributed to the drafting of the article.
