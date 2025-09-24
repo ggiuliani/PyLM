@@ -56,7 +56,7 @@ The analytical workflow follows a linear architecture, in which the output of ea
 
 # Installation
 This package requires Python 3.10 or later and JupyterLab (server or desktop). It also requires the following packages: 
-`rasterio`, `numpy`, `scipy`, and `csv`. These dependencies are automatically verified (and installed) within the <i>Intialization</i> module.
+`rasterio`, `numpy`, `scipy`,  `matplotlib` and `csv`. These dependencies are automatically verified (and installed) within the <i>Intialization</i> module.
 
 Users have to define the input (i.e., where the input LUC map in geotiff format is stored - `inputFolder`) and output (i.e., where all produced layers will be stored - `outputFolder`) folders. In addition, users can edit the file name of the LUC map in the `l3` variable.
 
