@@ -1,74 +1,84 @@
-# PyLM - Python Landscape Mosaic model
+#!/usr/bin/env python
+# coding: utf-8
 
----
-<div>This is a Python implementation of the Landscape Mosaic approach as originaly proposed in <a href='https://ies-ows.jrc.ec.europa.eu/gtb/GTB/psheets/GTB-Pattern-LM.pdf' target='_blank'>Vogt et al. (2024)</a> and further refined in <a href='https://doi.org/10.1371/journal.pone.0304215' target='_blank'>Vogt et al. (2024)</a> to support landscape anaylsis.</div>
-<br>Author(s): <a href='https://www.unige.ch/envirospace/people/giuliani' target='_blank'>Gregory Giuliani</a>
-<br>Version: 0.1
-<br>Date: 2025-04-13
-<br>Supported by: SNF DynamicLand; Horizon-Europe Nostradamus; LandShift; and MONALISA
+# # PyLM - Python Landscape Mosaic model
 
----
-<b><u>Outline</u></b>
-* [Methdology](#methodology)
-* [Intialize](#initialize)
-* [Input data](#inputdata)
-    * [Clip data](#clip)
-* [LM Analysis](#lmAnalysis)
-    * [LM Background](#lmBackground)
-    * [LM Diversity](#lmDiversity)
-    * [LM Agriculture](#lmAgriculture)
-    * [LM Natural](#lmNatural)
-    * [LM Developed](#lmDeveloped)
-    * [LM Anthropic Intensity](#lmAnthropicIntensity)
-    * [Heatmap](#lmHeatmap)
+# ---
+# <div>This is a Python implementation of the Landscape Mosaic approach as originaly proposed by <a href='https://doi.org/10.1016/j.ecolind.2008.02.003' target='_blank'>Ritters et al. (2009)</a> and further refined by <a href='https://ies-ows.jrc.ec.europa.eu/gtb/GTB/psheets/GTB-Pattern-LM.pdf' target='_blank'>Vogt et al. (2024)</a> and <a href='https://doi.org/10.1371/journal.pone.0304215' target='_blank'>Vogt et al. (2024)</a> for processing land cover maps, generating stratification layers, and producing key landscape metrics and visualizations (e.g., heatmaps).</div>
+# 
+# <br><i>Author(s):</i> <a href='https://www.unige.ch/envirospace/people/giuliani' target='_blank'>Gregory Giuliani</a>
+# <br><i>Version:</i> 1.0
+# <br><i>Date:</i> 2025-09-24
+# <br><i>Supported by:</i> SNSF <a href='https://data.snf.ch/grants/grant/221323' target='_blank'>DynamicLand</a>; Horizon-Europe <a href='https://landshift.eu' target='_blank'>LandShift</a> and <a href='https://monalisa4land.eu' target='_blank'>MONALISA</a> projects
 
----
-<a id="methodology"></a>
-## Methodology
-<i>from <a href='https://ies-ows.jrc.ec.europa.eu/gtb/GTB/psheets/GTB-Pattern-LM.pdf' target='_blank'>Vogt et al. (2024)</a></i>
-<div style="text-align: justify">The Landscape Mosaic is a tri-polar classification of a location accounting for the relative contributions of three prevalent land cover types, i.e., Agriculture, Natural, Developed in the window surrounding that location. The classification model is designed to identify anthropogenic activity (land cover classes falling in the categories Agriculture and Developed) in relation to natural land cover.
-The tri-polar classification scheme uses the threshold values of 10%, 60%, and 100% along each axis to partition the tri-polar space into 19 mosaic classes. These threshold values are indicative for the presence (10%), dominance (60%), or uniqueness (100%) of each land cover type. A lower-case letter (a-Agriculture, n-Natural, or d-Developed) in a mosaic class name denotes a respective land cover type proportion of at least 10% but less than 60%; an upper-class letter (A, N, D) denotes a respective contribution of at least 60% but less than 100%; A letter does not appear if the respective land cover proportion is less than 10%. Locations being composed of a single land cover type only (100%) are found at the corner points of the Mosaic triangle and are labeled with AA, NN, and DD, respectively. With this notation, Dominance is indicated by upper-case letters, an Interface Zone by a combination of upper- and lower-case letters, and a Mixture is indicated by lower-case letters only. The Mosaic colors reflect the varying degree in color intensity with respect to the proportion of blue-Agriculture, green-Natural, and red-Developed.</div>
+# ---
+# <b><u>Outline</u></b>
+# * [Methdology](#methodology)
+# * [Intialization](#initialize)
+# * [Input data](#inputdata)
+#     * [Clip data](#clip)
+# * [LM Analysis](#lmAnalysis)
+#     * [LM Background](#lmBackground)
+#     * [LM Diversity](#lmDiversity)
+#     * [LM Agriculture](#lmAgriculture)
+#     * [LM Natural](#lmNatural)
+#     * [LM Developed](#lmDeveloped)
+#     * [LM Anthropic Intensity](#lmAnthropicIntensity)
+#     * [Heatmap](#lmHeatmap)
 
-<div style="text-align: justify">In the resulting LM map, each pixel has a triplet of values showing the relative contribution to the 3 land cover types Agriculture, Natural, Developed. This implies that each pixel value triplet is positioned at a specific location within the triangular domain space. The 19 sub-sections of the triangle - representing presence, dominance and uniqueness - are color- coded into 19 mosaic classes, which are displayed in the resulting LM spatial maps and summarized in the legend above. Because each image pixel value triplet corresponds to a specific location in the triangle, the entire set of image pixels can be inserted in the triangle, resulting in a heatmap (point cloud distribution). To minimize computation time and facilitate the interpretation, this process is conducted for the 100 sub-triangles only, defined by the 10% intervals along each axis. The corner points of the triangle representing exclusive presence of one land cover type only form an additional 3 classes. With this setup, the heatmap consist of 103 occurrence classes, showing the relative pixel occurrence frequency in each sub-space.</div>
+# ---
+# <a id="methodology"></a>
+# ## Methodology
+# <i>from <a href='https://ies-ows.jrc.ec.europa.eu/gtb/GTB/psheets/GTB-Pattern-LM.pdf' target='_blank'>Vogt et al. (2024)</a></i>
+# <div style="text-align: justify">The Landscape Mosaic is a tri-polar classification of a location accounting for the relative contributions of three prevalent land cover types, i.e., Agriculture, Natural, Developed in the window surrounding that location. The classification model is designed to identify anthropogenic activity (land cover classes falling in the categories Agriculture and Developed) in relation to natural land cover.
+# The tri-polar classification scheme uses the threshold values of 10%, 60%, and 100% along each axis to partition the tri-polar space into 19 mosaic classes. These threshold values are indicative for the presence (10%), dominance (60%), or uniqueness (100%) of each land cover type. A lower-case letter (a-Agriculture, n-Natural, or d-Developed) in a mosaic class name denotes a respective land cover type proportion of at least 10% but less than 60%; an upper-class letter (A, N, D) denotes a respective contribution of at least 60% but less than 100%; A letter does not appear if the respective land cover proportion is less than 10%. Locations being composed of a single land cover type only (100%) are found at the corner points of the Mosaic triangle and are labeled with AA, NN, and DD, respectively. With this notation, Dominance is indicated by upper-case letters, an Interface Zone by a combination of upper- and lower-case letters, and a Mixture is indicated by lower-case letters only. The Mosaic colors reflect the varying degree in color intensity with respect to the proportion of blue-Agriculture, green-Natural, and red-Developed.</div>
+# 
+# <div style="text-align: justify">In the resulting LM map, each pixel has a triplet of values showing the relative contribution to the 3 land cover types Agriculture, Natural, Developed. This implies that each pixel value triplet is positioned at a specific location within the triangular domain space. The 19 sub-sections of the triangle - representing presence, dominance and uniqueness - are color- coded into 19 mosaic classes, which are displayed in the resulting LM spatial maps and summarized in the legend above. Because each image pixel value triplet corresponds to a specific location in the triangle, the entire set of image pixels can be inserted in the triangle, resulting in a heatmap (point cloud distribution). To minimize computation time and facilitate the interpretation, this process is conducted for the 100 sub-triangles only, defined by the 10% intervals along each axis. The corner points of the triangle representing exclusive presence of one land cover type only form an additional 3 classes. With this setup, the heatmap consist of 103 occurrence classes, showing the relative pixel occurrence frequency in each sub-space.</div>
 
----
-<a id="initialize"></a>
-## Initialize
-<div style="text-align: justify">This module first test if the necessary librairies are installed and then user is able to define both input and output folders.</div>
+# ---
+# <a id="initialize"></a>
+# ## Initialization
+# <div style="text-align: justify">This module first test if the necessary librairies are installed and then user is able to define both input and output folders.</div>
 
-### Load librairies
+# ### Load librairies
 
+# In[ ]:
 
-```python
+import os
 # Test if the libraries are installed and if not install them
-try:
-  import rasterio
-except:
-  !pip install rasterio
-  import rasterio
 
 try:
   import numpy
 except:
-  !pip install numpy
+  os.system('pip install numpy')
   import numpy
+
+try:
+  import rasterio
+except:
+  os.system('pip install rasterio')
+  import rasterio
 
 try:
   import scipy
 except:
-  !pip install scipy
+  os.system('pip install scipy')
   import scipy
 
 try:
   import csv
 except:
-  !pip install csv
+  os.system('pip install csv')
   import csv
+
+try: 
+    import matplotlib
+except:
+    os.system('pip install matplotlib')
+    import matplotlib
 
 #Import all necessary libraries
-import rasterio
 import numpy as np
-import scipy
 import rasterio.mask
 from matplotlib import pyplot
 import matplotlib.pyplot as plt
@@ -77,31 +87,33 @@ from itertools import product
 from rasterio.transform import Affine
 from rasterio.transform import from_origin
 from numpy.lib.stride_tricks import sliding_window_view
-import csv
-```
-
-### Define the input and output folders
 
 
-```python
-inputFolder = '../inputs/' #To be adapted by user
-outputFolder = '../outputs/' #To be adapted by user
-```
+# ### Define the input and output folders
 
-<a id="inputdata"></a>
-## Input Data - Import the 3-class Land Cover map
-<div style="text-align: justify">The input image for the Landscape Mosaic analysis must be a raster map with no more than 3 target classes having the assignment AND (1 Byte - Agriculture, 2 Byte - Natural, 3 Byte - Developed) plus an optional class value of 0 Byte which is reserved for masking missing/no-data pixels. The target classes must not necessary be Agriculture, Natural, Developed but could be any three prevalent land cover types in a given area.</div>
+# In[ ]:
 
 
-```python
-#read the LCCS Level-3 geotiff file
-l3 = rasterio.open(inputFolder+'level3_out_ch_2018.tif') #To be adapted by user
-```
-
-### Layer information
+inputFolder = 'inputs/' #To be adapted by user
+outputFolder = 'outputs/' #To be adapted by user
 
 
-```python
+# <a id="inputdata"></a>
+# ## Input Data
+# <div style="text-align: justify">The input image for the Landscape Mosaic analysis must be a raster map with no more than 3 target classes having the assignment AND (1 Byte - Agriculture, 2 Byte - Natural, 3 Byte - Developed) plus an optional class value of 0 Byte which is reserved for masking missing/no-data pixels. The target classes must not necessary be Agriculture, Natural, Developed but could be any three prevalent land cover types in a given area.</div>
+
+# In[ ]:
+
+
+#read the 3-classes geotiff file
+l3 = rasterio.open(inputFolder+'switzerland_CCI_92.tif') #To be adapted by user
+
+
+# ### Layer information
+
+# In[ ]:
+
+
 #Print different information on the layer
 #Dimensions
 print('Width: '+str(l3.width))
@@ -122,36 +134,69 @@ print('Resolution: '+str(l3.res))
 #Get unique LCCS3 code present in the map
 band1 = l3.read(1)
 np.unique(band1)
-```
-
-### Layer visualization
 
 
-```python
+# ### Layer visualization
+
+# In[ ]:
+
+
 #Visualize the LCCS Level-3 map
 pyplot.imshow(band1, cmap='grey')
 pyplot.show()  
-```
-
-### Map conversion
-To comply with the LM-input requirements, this input image is then re-mapped into the 3 land cover types: Agriculture (3), Natural(2), Developed(3).
-<br>IMPORTANT: this module should be adapted to your LC classification schema
-
-|Value|LCCS Code|LCCS Description|LM Code|LM Description|
-|---|---|---|---|---|
-|111|A11|Cultivated Terrestrial Vegetated|1|Agriculture|
-|112|A12|Natural Terrestrial Vegetated|2|Natural|
-|123|A23|Cultivated Aquatic Vegetated|1|Agriculture|
-|124|A24|Natural Aquatic Vegetated|2|Natural|
-|215|B15|Artificial Surface|3|Developed|
-|216|B16|Bare Surface|2|Natural|
-|227|B27|Artificial Water|3|Developed|
-|228|B28|Natural Water|2|Natural|
 
 
-```python
+# ### Map conversion [optional]
+# To comply with the LM-input requirements, this input image is then re-mapped into the 3 land cover types: Agriculture (1), Natural(2), Developed(3).
+# <br>IMPORTANT: this module should be adapted to your LC classification schema (hereafter we provide an example based on the ESA CCI schema)
+# 
+# |Value|CCI Label|LM Code|LM Description|
+# |---|---|---|---|
+# |0|No Data|0|No data|
+# |10|Cropland, rainfed|1|Agriculture|
+# |11|Herbaceous cover|1|Agriculture|
+# |12|Tree or shrub cover|1|Agriculture|
+# |20|Cropland, irrigated or post‐flooding|1|Agriculture|
+# |30|Mosaic cropland (>50%) / natural vegetation (tree, shrub, herbaceous cover) (<50%)|1|Agriculture|
+# |40|Mosaic natural vegetation (tree, shrub, herbaceous cover) (>50%) / cropland (<50%)|1|Agriculture|
+# |50|Tree cover, broadleaved, evergreen, closed to open (>15%)|2|Natural|
+# |60|Tree cover, broadleaved, deciduous, closed to open (>15%)|2|Natural|
+# |61|Tree cover, broadleaved, deciduous, closed (>40%)|2|Natural|
+# |62|Tree cover, broadleaved, deciduous, open (15‐40%)|2|Natural|
+# |70|Tree cover, needleleaved, evergreen, closed to open (>15%)|2|Natural|
+# |71|Tree cover, needleleaved, evergreen, closed (>40%)|2|Natural|
+# |72|Tree cover, needleleaved, evergreen, open (15‐40%)|2|Natural|
+# |80|Tree cover, needleleaved, deciduous, closed to open (>15%)|2|Natural|
+# |81|Tree cover, needleleaved, deciduous, closed (>40%)|2|Natural|
+# |82|Tree cover, needleleaved, deciduous, open (15‐40%)|2|Natural|
+# |90|Tree cover, mixed leaf type (broadleaved and needleleaved)|2|Natural|
+# |100|Mosaic tree and shrub (>50%) / herbaceous cover (<50%)|2|Natural|
+# |110|Mosaic herbaceous cover (>50%) / tree and shrub (<50%)|2|Natural|
+# |120|Shrubland|2|Natural|
+# |121|Evergreen shrubland|2|Natural|
+# |122|Deciduous shrubland|2|Natural|
+# |130|Grassland|2|Natural|
+# |140|Lichens and mosses|2|Natural|
+# |150|Sparse vegetation (tree, shrub, herbaceous cover) (<15%)|2|Natural|
+# |151|Sparse tree (<15%)|2|Natural|
+# |152|Sparse shrub (<15%)|2|Natural|
+# |153|Sparse herbaceous cover (<15%)|2|Natural|
+# |160|Tree cover, flooded, fresh or brakish water|2|Natural|
+# |170|Tree cover, flooded, saline water|2|Natural|
+# |180|Shrub or herbaceous cover, flooded, fresh/saline/brakish water|2|Natural|
+# |190|Urban areas|3|Developed|
+# |200|Bare areas|2|Natural|
+# |201|Consolidated bare areas|2|Natural|
+# |202|Unconsolidated bare areas|2|Natural|
+# |210|Water bodies|2|Natural|
+# |220|Permanent snow and ice|2|Natural|
+# 
+
+# In[ ]:
+
+
 #Reclassify
-with rasterio.open('switzerland_CCI_92.tif') as src:    
+with rasterio.open(inputFolder+'switzerland_CCI_92.tif') as src: #To be adapted by user 
     # Read as numpy array
     array = src.read()
     profile = src.profile
@@ -201,39 +246,46 @@ with rasterio.open(outputFolder+'l3_reclass.tif', 'w', **profile) as dst:
     dst.write(array)
 
 print(f"Reclassified file '{outputFolder+'l3_reclass.tif'}' created successfully.")
-```
-
-<a id="lmAnalysis"></a>
-## LM Analysis
-<i>from <a href='https://ies-ows.jrc.ec.europa.eu/gtb/GTB/psheets/GTB-Pattern-LM.pdf' target='_blank'>Vogt et al. (2024)</a> and <a href='https://publications.jrc.ec.europa.eu/repository/handle/JRC120383' target='_blank'>Maes et al. (2020)</a></i>
-<div style="text-align: justify">Each pixel in the LM-image is derived by a moving window procedure in the following way: a) a fixed-area square window is centered over a given pixel of the land cover type image; b) the composition of the three land cover types (the contribution triplet in A, N, D) is calculated from the pixels covered by the square window; c) the corresponding mosaic class is placed on the LM-image at the location of the investigated pixel. This implies that each pixel in the LM-image describes the land cover context within the surrounding square area.</div>
-<div style="text-align: justify">The full LM-information is then summarised into the following five stratification layers with specific focus on dedicated thematic topics: 
-
-1. LM-Background: LM summary into 4 classes: Natural, Agriculture, Developed and Mixed.  
-
-2. LM-Diversity: LM summary into 4 classes showing increasing degree of land cover diversity from Uniform, Dual, Triple, to Intermixed land cover.  
-
-3. LM-Agriculture: LM interface summary into 3 classes showing areas where agricultural land cover is dominant (>= 60%), subdominant, or minor (<10%).  
-
-4. LM-Natural: LM interface summary into 3 classes showing areas where natural land cover is dominant (>= 60%), subdominant, or minor (<10%).  
-
-5. LM-Developed: LM interface summary into 3 classes showing areas where developed land cover is dominant (>= 60%), subdominant, or minor (<10%).
-
-<div>
-<div style="text-align: justify">The scope of the LM-Background layer is to facilitate the reporting on land cover composition by focusing on the dominant presence (>= 60%) of each of the three land cover types. The second stratification layer, LMDiversity, reports on the degree of spatial land cover heterogeneity. Because land cover dynamics are mainly driven by human activities it is of interest to investigate the interface zones for each of the 3 land cover types with their surrounding neighbourhood. Hence, the purpose of the stratification layer 4 (LM-Natural) is to delineate areas with prevalent natural land cover from those impacted by anthropogenic activities. The purpose of the stratification layers 3 (LM-Agriculture) and 5 (LM-Developed) is to locate and show the intensity of the human footprint on the landscape originating from Agriculture and Developed pressure, respectively. The mapping of the three interface zones (stratification layer 3-5) is an essential prerequisite for policy planning, monitoring and assessment, and towards understanding potential impacts of anthropogenic activities on the environment.</div>
-    
-<div style="text-align: justify">Because each pixel has a contribution triplet in A, N, D, it will fall in one of the 103 sub-spaces of the LM-triangle. The heatmap shows the relative occurrence frequency of all LM-image pixels. Because occurrence frequencies are shown in percent, the heatmap can be used to a) compare landscape composition for images of different extent, or b) investigate time series at the same observation scale, or c) investigate changes in land cover prevalence across different scales.</div>
-
-### Moving Window count
-Computes the frequencies for the three end-members and store them into a 3D-array
 
 
-```python
+# <a id="lmAnalysis"></a>
+# ## LM Analysis
+# <i>from <a href='https://ies-ows.jrc.ec.europa.eu/gtb/GTB/psheets/GTB-Pattern-LM.pdf' target='_blank'>Vogt et al. (2024)</a> and <a href='https://publications.jrc.ec.europa.eu/repository/handle/JRC120383' target='_blank'>Maes et al. (2020)</a></i>
+# <div style="text-align: justify">Each pixel in the LM-image is derived by a moving window procedure in the following way: a) a fixed-area square window is centered over a given pixel of the land cover type image; b) the composition of the three land cover types (the contribution triplet in A, N, D) is calculated from the pixels covered by the square window; c) the corresponding mosaic class is placed on the LM-image at the location of the investigated pixel. This implies that each pixel in the LM-image describes the land cover context within the surrounding square area.</div>
+# <div style="text-align: justify">The full LM-information is then summarised into the following five stratification layers with specific focus on dedicated thematic topics: 
+# 
+# 1. LM-Background: LM summary into 4 classes: Natural, Agriculture, Developed and Mixed.  
+# 
+# 2. LM-Diversity: LM summary into 4 classes showing increasing degree of land cover diversity from Uniform, Dual, Triple, to Intermixed land cover.  
+# 
+# 3. LM-Agriculture: LM interface summary into 3 classes showing areas where agricultural land cover is dominant (>= 60%), subdominant, or minor (<10%).  
+# 
+# 4. LM-Natural: LM interface summary into 3 classes showing areas where natural land cover is dominant (>= 60%), subdominant, or minor (<10%).  
+# 
+# 5. LM-Developed: LM interface summary into 3 classes showing areas where developed land cover is dominant (>= 60%), subdominant, or minor (<10%).
+# 
+# <div>
+# <div style="text-align: justify">The scope of the LM-Background layer is to facilitate the reporting on land cover composition by focusing on the dominant presence (>= 60%) of each of the three land cover types. The second stratification layer, LMDiversity, reports on the degree of spatial land cover heterogeneity. Because land cover dynamics are mainly driven by human activities it is of interest to investigate the interface zones for each of the 3 land cover types with their surrounding neighbourhood. Hence, the purpose of the stratification layer 4 (LM-Natural) is to delineate areas with prevalent natural land cover from those impacted by anthropogenic activities. The purpose of the stratification layers 3 (LM-Agriculture) and 5 (LM-Developed) is to locate and show the intensity of the human footprint on the landscape originating from Agriculture and Developed pressure, respectively. The mapping of the three interface zones (stratification layer 3-5) is an essential prerequisite for policy planning, monitoring and assessment, and towards understanding potential impacts of anthropogenic activities on the environment.</div>
+#     
+# <div style="text-align: justify">Because each pixel has a contribution triplet in A, N, D, it will fall in one of the 103 sub-spaces of the LM-triangle. The heatmap shows the relative occurrence frequency of all LM-image pixels. Because occurrence frequencies are shown in percent, the heatmap can be used to a) compare landscape composition for images of different extent, or b) investigate time series at the same observation scale, or c) investigate changes in land cover prevalence across different scales.</div>
+
+# ### Moving Window count
+# Computes the frequencies for the three end-members and store them into a 3D-array
+
+# In[ ]:
+
+
+# Open and read the 3-class (Agriculture, Natural, Developed) raster
+src = rasterio.open(outputFolder+'l3_reclass.tif')
+raster = src.read(1)
+
+
+# In[ ]:
+
+
 #General idea: iterate over the entire array
 #for each pixel > store c1-c2-c3 (values store in a 3-band raster, each representing one class
 #the produced raster is then used for the Map - Heatmap - LM_Background, ...
-#Padding: https://www.pythoncentral.io/how-to-use-numpy-pad-examples-and-syntax/
-#if the LCCS3 map is at 10m resolution then a 10x10 window will give you a direct %
 
 #window size
 res=10
@@ -288,13 +340,14 @@ with rasterio.open(
     dst.write(result[2], 3)  # Write Band 3 (developed)
 
 print(f"GeoTIFF file '{output_filename}' created successfully.")
-```
-
-### 103-classes
-Computes the 103-classes defined by the LM model
 
 
-```python
+# ### 103-classes
+# Computes the 103-classes defined by the LM model
+
+# In[ ]:
+
+
 # Read the 3-band raster and define the outputs
 input_raster = outputFolder+"lmCount.tif"
 output_raster = outputFolder+"lm103class.tif"
@@ -728,13 +781,14 @@ with rasterio.open(output_raster, 'w', **profile) as dst:
     dst.write(reclassified.astype(rasterio.uint8), 1)  # Write reclassified data to band 1
 
 print(f"LM 103-classes saved to {output_raster}")
-```
-
-### 19-classes
-Computes the 19-classes defined by the LM model
 
 
-```python
+# ### 19-classes
+# Computes the 19-classes defined by the LM model
+
+# In[ ]:
+
+
 # Read the input raster and define the outputs
 input_raster = outputFolder+"lm103class.tif"
 output_raster = outputFolder+"lm19class.tif"
@@ -815,15 +869,16 @@ with rasterio.open(output_raster_rgb, 'w', **profile) as dst_rgb:
     cmap = dst_rgb.colormap(1) 
 
 print(f"LM 19-classes RGB saved to {output_raster_rgb}")
-```
-
----
-<a id="lmBackground"></a>
-### LM Background
-Computes the LM Background stratification layer
 
 
-```python
+# ---
+# <a id="lmBackground"></a>
+# ### LM Background
+# Computes the LM Background stratification layer
+
+# In[ ]:
+
+
 # Read the input raster and define the outputs
 input_raster = outputFolder+"lm103class.tif"
 output_raster = outputFolder+"lmBackground.tif"
@@ -879,15 +934,16 @@ with rasterio.open(output_raster_rgb, 'w', **profile) as dst_rgb:
     cmap = dst_rgb.colormap(1) 
 
 print(f"LM Background RGB saved to {output_raster_rgb}")
-```
-
----
-<a id="lmDiversity"></a>
-### LM Diversity
-Computes the LM Diversity stratification layer
 
 
-```python
+# ---
+# <a id="lmDiversity"></a>
+# ### LM Diversity
+# Computes the LM Diversity stratification layer
+
+# In[ ]:
+
+
 # Read the input raster and define the outputs
 input_raster = outputFolder+"lm103class.tif"
 output_raster = outputFolder+"lmDiversity.tif"
@@ -939,15 +995,16 @@ with rasterio.open(output_raster_rgb, 'w', **profile) as dst_rgb:
     cmap = dst_rgb.colormap(1) 
 
 print(f"LM Diversity RGB saved to {output_raster_rgb}")
-```
-
----
-<a id="lmAgriculture"></a>
-### LM Agriculture
-Computes the LM Agriculture stratrification layer
 
 
-```python
+# ---
+# <a id="lmAgriculture"></a>
+# ### LM Agriculture
+# Computes the LM Agriculture stratrification layer
+
+# In[ ]:
+
+
 # Read the input raster and define the outputs
 input_raster = outputFolder+"lm103class.tif"
 output_raster = outputFolder+"lmAgriculture.tif"
@@ -998,15 +1055,16 @@ with rasterio.open(output_raster_rgb, 'w', **profile) as dst_rgb:
     cmap = dst_rgb.colormap(1) 
 
 print(f"LM Agriculture RGB saved to {output_raster_rgb}")
-```
-
----
-<a id="lmNatural"></a>
-### LM Natural
-Computes the LM Natural stratification layer
 
 
-```python
+# ---
+# <a id="lmNatural"></a>
+# ### LM Natural
+# Computes the LM Natural stratification layer
+
+# In[ ]:
+
+
 # Read the input raster and define the outputs
 input_raster = outputFolder+"lm103class.tif"
 output_raster = outputFolder+"lmNatural.tif"
@@ -1056,15 +1114,16 @@ with rasterio.open(output_raster_rgb, 'w', **profile) as dst_rgb:
     cmap = dst_rgb.colormap(1) 
 
 print(f"LM Natural RGB saved to {output_raster_rgb}")
-```
-
----
-<a id="lmDeveloped"></a>
-### LM Developed
-Computes the LM Developed stratification layer
 
 
-```python
+# ---
+# <a id="lmDeveloped"></a>
+# ### LM Developed
+# Computes the LM Developed stratification layer
+
+# In[ ]:
+
+
 # Read the input raster and define the outputs
 input_raster = outputFolder+"lm103class.tif"
 output_raster = outputFolder+"lmDeveloped.tif"
@@ -1114,15 +1173,16 @@ with rasterio.open(output_raster_rgb, 'w', **profile) as dst_rgb:
     cmap = dst_rgb.colormap(1) 
 
 print(f"LM Developed RGB saved to {output_raster_rgb}")
-```
-
----
-<a id="lmAnthropicIntensity"></a>
-### Anthropic Intensity
-Computes the Anthropic Intensity stratification layer
 
 
-```python
+# ---
+# <a id="lmAnthropicIntensity"></a>
+# ### Anthropic Intensity
+# Computes the Anthropic Intensity stratification layer
+
+# In[ ]:
+
+
 # Read the input raster and define the outputs
 input_raster = outputFolder+"lm103class.tif"
 output_raster = outputFolder+"lmAnthropicIntensity.tif"
@@ -1177,15 +1237,16 @@ with rasterio.open(output_raster_rgb, 'w', **profile) as dst_rgb:
     cmap = dst_rgb.colormap(1) 
 
 print(f"LM Anthropic Intensity RGB saved to {output_raster_rgb}")
-```
-
----
-<a id="lmHeatmap"></a>
-### Heatmap
-Computes the pixel proportions for each of the 103 classes and summarized them into a table and a heatmap
 
 
-```python
+# ---
+# <a id="lmHeatmap"></a>
+# ### Heatmap
+# Computes the pixel proportions for each of the 103 classes and summarized them into a table and a heatmap
+
+# In[ ]:
+
+
 # Read the input raster and define the outputs CSV files
 input_raster = outputFolder+"lm103class.tif"
 output_stats_path = outputFolder+"stats.csv"
@@ -1439,8 +1500,8 @@ with open(output_heatmap_path, mode='w') as heatmapfile:
     csv_writer.writerow([",      "+str(p190)+", , , , , , , , , , , , , , , , , , , ,    "+str(p180)])
 
 print(f"The Heatmap file containing all proportions is saved in {output_heatmap_path}.")
-```
 
----
-<br>License: https://creativecommons.org/licenses/by/4.0/ 
-<br><img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by.png" alt="CC-BY" width="100"/>
+
+# ---
+# <br>License: https://creativecommons.org/licenses/by/4.0/ 
+# <br><img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by.png" alt="CC-BY" width="100"/>
