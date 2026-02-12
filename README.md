@@ -47,4 +47,4 @@ Contributions are welcome and greatly appreciated! To contribute, please follow 
 * Maintainer: [Gregory Giuliani](https://www.unige.ch/envirospace/people/giuliani)
 
 **How to cite?**
-Giuliani G. (2026) PyLM: A Python implementation for Landscape Mosaic analysis, Land 15(1):187 https://doi.org/10.3390/land15010187
+<br>Giuliani G. (2026) PyLM: A Python implementation for Landscape Mosaic analysis, Land 15(1):187 https://doi.org/10.3390/land15010187
