@@ -40,6 +40,9 @@ Contributions are welcome and greatly appreciated! To contribute, please follow 
 **Development process**
 * Fork the repository, make changes in your fork, and submit a pull request.
 * Follow the existing coding style and structure.
+
+**How to cite?**
+Giuliani G. (2026) PyLM: A Python implementation for Landscape Mosaic analysis, Land 15(1):187 https://doi.org/10.3390/land15010187
 * Write tests for any new functionality.
 * Document any changes in the package documentation.
 
