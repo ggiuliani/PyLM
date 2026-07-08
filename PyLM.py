@@ -7,8 +7,8 @@
 # <div>This is a Python implementation of the Landscape Mosaic approach as originaly proposed by <a href='https://doi.org/10.1016/j.ecolind.2008.02.003' target='_blank'>Ritters et al. (2009)</a> and further refined by <a href='https://ies-ows.jrc.ec.europa.eu/gtb/GTB/psheets/GTB-Pattern-LM.pdf' target='_blank'>Vogt et al. (2024)</a> and <a href='https://doi.org/10.1371/journal.pone.0304215' target='_blank'>Vogt et al. (2024)</a> for processing land cover maps, generating stratification layers, and producing key landscape metrics and visualizations (e.g., heatmaps).</div>
 # 
 # <br><i>Author(s):</i> <a href='https://www.unige.ch/envirospace/people/giuliani' target='_blank'>Gregory Giuliani</a>
-# <br><i>Version:</i> 1.0
-# <br><i>Date:</i> 2025-09-24
+# <br><i>Version:</i> 2.0
+# <br><i>Date:</i> 2026-07-08
 # <br><i>Supported by:</i> SNSF <a href='https://data.snf.ch/grants/grant/221323' target='_blank'>DynamicLand</a>; Horizon-Europe <a href='https://landshift.eu' target='_blank'>LandShift</a> and <a href='https://monalisa4land.eu' target='_blank'>MONALISA</a> projects
 
 # ---
@@ -283,45 +283,56 @@ raster = src.read(1)
 # In[ ]:
 
 
-#General idea: iterate over the entire array
-#for each pixel > store c1-c2-c3 (values store in a 3-band raster, each representing one class
-#the produced raster is then used for the Map - Heatmap - LM_Background, ...
+# General idea: for each pixel, count occurrences of class values 1/2/3
+# within a res x res sliding window, using an integral image (summed-area
+# table) instead of a per-pixel Python loop. Output is a 3-band raster
+# used for the Map - Heatmap - LM_Background, ...
 
-#window size
-res=10
-
-# Define the window shape
-window_shape = (res, res)
-
-# Padding size to ensure all pixels are included
+# Window size
+res = 10
 pad_width = res // 2
 
 # Pad the input 2D array to ensure that all pixels of the country are processed
 padded_raster = np.pad(raster, pad_width, mode='edge')
 
-# Create a sliding window view of the raster with shape
-windows = np.lib.stride_tricks.sliding_window_view(padded_raster, window_shape)
 
-# Initialize an array to store the result
-result = np.empty((3, windows.shape[0], windows.shape[1]), dtype=np.uint16)
+def sliding_sum(mask, win):
+    """
+    Exact sliding-window sum (stride 1) of a boolean/int mask, using a
+    summed-area table (integral image). Produces the same window
+    alignment as np.lib.stride_tricks.sliding_window_view(arr, (win, win))
+    followed by summing each window, but in O(H*W) instead of O(H*W*win^2).
+    """
+    mask = mask.astype(np.uint32)
+    # Cumulative sum along both axes
+    cs = np.cumsum(np.cumsum(mask, axis=0), axis=1)
+    # Pad with a zero row/col so we can index cleanly with inclusion-exclusion
+    cs = np.pad(cs, ((1, 0), (1, 0)), mode='constant')
+    # Inclusion-exclusion to get the sum in each win x win window
+    return cs[win:, win:] - cs[:-win, win:] - cs[win:, :-win] + cs[:-win, :-win]
 
-# Iterate over the windows
-for i in range(windows.shape[0]):
-    for j in range(windows.shape[1]):
 
-        # Extract the current 10x10 window
-        window = windows[i, j]
+# Boolean masks for each class
+mask_agri = (padded_raster == 1)
+mask_nat = (padded_raster == 2)
+mask_dev = (padded_raster == 3)
 
-        # Calculate the sum and store it in the result array
-        result[0, i, j] = np.count_nonzero(window == 1)  # Band 1: Agriculture count
-        result[1, i, j] = np.count_nonzero(window == 2)   # Band 2: Natural count
-        result[2, i, j] = np.count_nonzero(window == 3)   # Band 3: Developed count
+# Compute sliding-window counts for each class
+count_agri = sliding_sum(mask_agri, res)
+count_nat = sliding_sum(mask_nat, res)
+count_dev = sliding_sum(mask_dev, res)
+
+# Stack into result array with same shape/dtype convention as before
+result = np.empty((3,) + count_agri.shape, dtype=np.uint16)
+result[0] = count_agri  # Band 1: Agriculture count
+result[1] = count_nat    # Band 2: Natural count
+result[2] = count_dev    # Band 3: Developed count
 
 # Save the result as a new GeoTIFF file
-output_filename = outputFolder+"lmCount.tif"
+output_filename = outputFolder + "lmCount.tif"
 
-# Define GeoTIFF metadata, you may need to adjust these depending on your data 
-transform = from_origin(src.bounds.left, src.bounds.top, src.res[0], src.res[0])  # transform (origin x, origin y, pixel size x, pixel size y)
+# Define GeoTIFF metadata, you may need to adjust these depending on your data
+transform = from_origin(src.bounds.left, src.bounds.top, src.res[0], src.res[0])
 new_dtype = raster.dtype
 
 with rasterio.open(
@@ -330,14 +341,14 @@ with rasterio.open(
     driver="GTiff",
     height=result.shape[1],
     width=result.shape[2],
-    count=3,  # Three bands for mean, min, and max
+    count=3,  # Three bands: agriculture, natural, developed
     dtype=new_dtype,
-    crs="EPSG:2056",  # Coordinate reference system; adjust as needed
+    crs=src.crs,
     transform=transform,
 ) as dst:
-    dst.write(result[0], 1)  # Write Band 1 (agriculture)
-    dst.write(result[1], 2)  # Write Band 2 (natural)
-    dst.write(result[2], 3)  # Write Band 3 (developed)
+    dst.write(result[0], 1)  # Band 1 (agriculture)
+    dst.write(result[1], 2)  # Band 2 (natural)
+    dst.write(result[2], 3)  # Band 3 (developed)
 
 print(f"GeoTIFF file '{output_filename}' created successfully.")
 
